@@ -1,0 +1,1 @@
+:root{--yellow: #f7c200;--blue: #0f6fc0;--background: #f3f3f3;--white: #ffffff;--text: #333333}body{background-color:var(--background);margin:0%;padding:0%}.tablas{display:flex;padding:6px;gap:6px}.title{text-align:center;font-size:1.6rem}
