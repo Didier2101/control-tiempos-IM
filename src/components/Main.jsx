@@ -8,7 +8,8 @@ import { Routes, Route } from 'react-router-dom';
 const Main = () => {
     return (
         <Box
-            sx={{ padding: '8px' }}
+            sx={{ padding: '8px', height: 'auto' }}
+
         >
             <Navbar />
             <Routes>

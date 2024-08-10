@@ -25,6 +25,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                     borderRadius: 6,
                     width: '80%',
                     margin: '0 auto',
+                    backgroundColor: 'secondary.main',
                 }}>
                     <Toolbar>
 
@@ -32,7 +33,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                             sx={{
                                 fontWeight: 'bold',
                                 fontSize: '1.4rem',
-                                color: "secondary.main"
+                                color: "info.main"
                             }}>
                             {currentTime}
                         </Typography>
@@ -40,7 +41,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                         <Button
                             size='normal'
                             variant='outlined'
-                            color='secondary'
+                            color='info'
                             onClick={handleOpen}
                             sx={{
                                 borderRadius: '14px', // Ajusta el valor según tus necesidades
@@ -51,7 +52,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                         <Button
                             size='normal'
                             variant='outlined'
-                            color='secondary'
+                            color='info'
                             onClick={handleOpenList}
                             sx={{
                                 marginLeft: 2,

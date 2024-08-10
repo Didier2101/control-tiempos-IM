@@ -7,6 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import { Box, IconButton, TextField } from '@mui/material';
 
 const Datos1 = () => {
@@ -74,6 +75,7 @@ const Datos1 = () => {
         setBarcode(e.target.value);
     };
 
+
     const handleBarcodeScan = (barcode) => {
         const now = new Date();
         const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
@@ -87,28 +89,47 @@ const Datos1 = () => {
         setCoffeeData(prevState => {
             const currentEntry = prevState[barcode];
             let newCoffeeData;
+
             if (!currentEntry) {
+                // Nuevo registro de salida
                 newCoffeeData = { ...prevState, [barcode]: { out: time, timestamp: now } };
             } else if (!currentEntry.in) {
+                // Registro de entrada
                 const outTime = new Date(`${now.toDateString()} ${currentEntry.out}`);
                 const diff = Math.round((now - outTime) / 60000); // Diferencia en minutos
-                newCoffeeData = { ...prevState, [barcode]: { ...currentEntry, in: time, time: `${diff} minutos`, timestamp: now } };
+
+                // Ajustar la diferencia en minutos si la entrada es al día siguiente
+                const outDate = new Date(outTime);
+                const inDate = new Date(now);
+                let adjustedDiff = diff;
+
+                if (inDate.getDate() !== outDate.getDate()) {
+                    // Si la fecha de entrada es diferente, ajustar la diferencia
+                    const daysDifference = inDate.getDate() - outDate.getDate();
+                    const hoursInDay = 24;
+                    const minutesInDay = hoursInDay * 60;
+                    adjustedDiff = (daysDifference * minutesInDay) + diff;
+                }
+
+                newCoffeeData = { ...prevState, [barcode]: { ...currentEntry, in: time, time: `${adjustedDiff} minutos`, timestamp: now } };
             } else {
+                // Reiniciar registro
                 newCoffeeData = { ...prevState, [barcode]: { out: time, in: null, time: null, timestamp: now } };
             }
+
+            // Actualizar en localStorage
             localStorage.setItem('coffeeData', JSON.stringify(newCoffeeData));
             return newCoffeeData;
         });
 
         setScannedEmployees(prevState => {
-            if (prevState.find(emp => emp.codigoBarras === barcode)) {
-                return prevState;
-            }
-            const updatedScannedEmployees = [...prevState, employee];
+            // Insertar el nuevo empleado al principio del array
+            const updatedScannedEmployees = [employee, ...prevState.filter(emp => emp.codigoBarras !== barcode)];
             localStorage.setItem('scannedCoffeeEmployees', JSON.stringify(updatedScannedEmployees));
             return updatedScannedEmployees;
         });
     };
+
 
     const handleDownloadPDF = () => {
         const doc = new jsPDF();
@@ -117,38 +138,51 @@ const Datos1 = () => {
         const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
         doc.setFontSize(16);
-        doc.text('Registros de Empleados - Tiempo tomado en el cafe', 20, 20);
+        doc.text('Registros de Empleados - Tiempo tomado en el café', 20, 20);
         doc.setFontSize(12);
         doc.text(`Fecha de descarga: ${dateStr} Hora: ${timeStr}`, 20, 30);
 
-        const headers = ["Nombre", "Hora de salida", "Hora de entrada", "Tiempo tomado"];
+        const headers = ["Nombre", "Hora de salida", "Hora de entrada", "Tiempo tomado", "Área"];
         const rows = scannedEmployees.map((employee) => {
             const coffeeRecord = coffeeData[employee.codigoBarras] || {};
             return [
-                employee.nombres,
-                coffeeRecord.out || 'No registra',
-                coffeeRecord.in || 'No registra',
-                coffeeRecord.time || 'No registra',
+                employee.nombres.toLowerCase(),
+                coffeeRecord.out ? coffeeRecord.out.toLowerCase() : 'no registra',
+                coffeeRecord.in ? coffeeRecord.in.toLowerCase() : 'no registra',
+                coffeeRecord.time ? coffeeRecord.time.toLowerCase() : 'no registra',
+                employee.area.toLowerCase(),
             ];
         });
 
-        headers.forEach((header, index) => {
-            doc.text(header, 20 + index * 40, 40);
-        });
-
-        rows.forEach((row, rowIndex) => {
-            row.forEach((cell, cellIndex) => {
-                if (cell === 'No registra') {
-                    doc.setTextColor(255, 0, 0); // Rojo
+        doc.autoTable({
+            startY: 40, // Ajusta el valor según la posición deseada para la tabla
+            head: [headers],
+            body: rows,
+            styles: {
+                fontSize: 10,
+                cellPadding: 2,
+                halign: 'left',
+                valign: 'middle',
+            },
+            columnStyles: {
+                0: { halign: 'left' },
+                1: { halign: 'left' },
+                2: { halign: 'left' },
+                3: { halign: 'left' },
+                4: { halign: 'left' },
+            },
+            didParseCell: (data) => {
+                if (data.cell.text === 'no registra') {
+                    data.cell.styles.textColor = [255, 0, 0]; // Rojo
                 } else {
-                    doc.setTextColor(0, 0, 0); // Negro
+                    data.cell.styles.textColor = [0, 0, 0]; // Negro
                 }
-                doc.text(cell, 20 + cellIndex * 40, 50 + rowIndex * 10);
-            });
+            }
         });
 
         doc.save('registros_empleados.pdf');
     };
+
 
     return (
         <TableContainer
@@ -193,6 +227,9 @@ const Datos1 = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold' }}>Nombre</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>
+                            Area
+                        </TableCell>
                         <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Hora de salida</TableCell>
                         <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Hora de entrada</TableCell>
                         <TableCell sx={{ textAlign: 'end', padding: '10px 0px', fontWeight: 'bold' }}>Tiempo tomado</TableCell>
@@ -203,6 +240,9 @@ const Datos1 = () => {
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                             <TableCell component="th" scope="row" sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold' }}>
                                 {employee.nombres.toUpperCase()}
+                            </TableCell>
+                            <TableCell component="th" scope="row" sx={{ textAlign: 'center', padding: '10px 0px', }}>
+                                {employee.area.toUpperCase()}
                             </TableCell>
                             <TableCell sx={{ padding: '10px 0px', textAlign: 'center' }}>
                                 {coffeeData[employee.codigoBarras]?.out ? (
@@ -244,9 +284,17 @@ const Datos1 = () => {
                                     </Box>
                                 ) : 'No registra'}
                             </TableCell>
-                            <TableCell sx={{ padding: '10px 0px', textAlign: 'end' }}>
+                            <TableCell
+                                sx={{
+                                    padding: '10px 0px',
+                                    textAlign: 'end',
+                                    color: (coffeeData[employee.codigoBarras]?.time &&
+                                        parseInt(coffeeData[employee.codigoBarras].time) > 20) ? 'red' : 'green'
+                                }}
+                            >
                                 {coffeeData[employee.codigoBarras]?.time ? coffeeData[employee.codigoBarras].time : 'No registra'}
                             </TableCell>
+
                         </TableRow>
                     ))}
                 </TableBody>
