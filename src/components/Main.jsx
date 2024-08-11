@@ -7,10 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 
 const Main = () => {
     return (
-        <Box
-            sx={{ padding: '8px', height: 'auto' }}
-
-        >
+        <Box>
             <Navbar />
             <Routes>
                 <Route path="/" element={<Datos1 />} />

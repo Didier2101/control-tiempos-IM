@@ -18,6 +18,7 @@ const Footer = () => {
                 alignItems: 'center',
                 gap: '10px', // Espacio entre la imagen y el texto
                 zIndex: 10,
+                marginTop: '10px'
             }}
         >
             <Box

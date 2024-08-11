@@ -187,10 +187,10 @@ const Datos2 = () => {
             sx={{
                 border: 'none',
                 backgroundColor: 'info.main',
-                borderRadius: '16px',
+                borderRadius: '6px',
                 padding: '0px 10px',
                 boxSizing: 'border-box',
-                width: '80%',
+                width: '98%',
                 margin: '0 auto',
             }}
         >
@@ -223,36 +223,36 @@ const Datos2 = () => {
             <Table sx={{ width: '100%', borderCollapse: 'collapse' }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold' }}>Nombre</TableCell>
-                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Area</TableCell>
-                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Hora de salida</TableCell>
-                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Hora de entrada</TableCell>
-                        <TableCell sx={{ textAlign: 'end', padding: '10px 0px', fontWeight: 'bold' }}>Tiempo tomado</TableCell>
+                        <TableCell sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Nombre</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Area</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Hora de salida</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Hora de entrada</TableCell>
+                        <TableCell sx={{ textAlign: 'end', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Tiempo tomado</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {scannedEmployees.map((employee, index) => (
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell component="th" scope="row" sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold' }}>
+                            <TableCell component="th" scope="row" sx={{ textAlign: 'start', padding: '10px 0px', fontSize: '0.7rem' }}>
                                 {employee.nombres.toUpperCase()}
                             </TableCell>
-                            <TableCell component="th" scope="row" sx={{ textAlign: 'center', padding: '10px 0px', }}>
+                            <TableCell component="th" scope="row" sx={{ textAlign: 'center', padding: '10px 0px', fontSize: '0.7rem' }}>
                                 {employee.area}
                             </TableCell>
-                            <TableCell sx={{ padding: '10px 0px', textAlign: 'center' }}>
+                            <TableCell sx={{ padding: '10px 0px', textAlign: 'center', fontSize: '0.7rem' }}>
                                 {breakData[employee.codigoBarras]?.out ? (
                                     <Box
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            borderRadius: '10px',
-                                            backgroundColor: 'green',
+                                            borderRadius: '6px',
+                                            backgroundColor: 'success.main',
                                             color: 'white',
                                             fontWeight: 'bold',
-                                            fontSize: '14px',
+                                            fontSize: '0.7rem',
                                             textAlign: 'center',
-                                            padding: '3px 6px',
+                                            padding: '3px 8px',
                                         }}
                                     >
                                         {breakData[employee.codigoBarras].out}
@@ -266,13 +266,13 @@ const Datos2 = () => {
                                             display: 'inline-flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            borderRadius: '10px',
-                                            backgroundColor: 'green',
+                                            borderRadius: '6px',
+                                            backgroundColor: 'warning.main',
                                             color: 'white',
                                             fontWeight: 'bold',
-                                            fontSize: '14px',
+                                            fontSize: '0.7rem',
                                             textAlign: 'center',
-                                            padding: '3px 6px',
+                                            padding: '3px 8px',
                                         }}
                                     >
                                         {breakData[employee.codigoBarras].in}
@@ -283,8 +283,9 @@ const Datos2 = () => {
                                 sx={{
                                     padding: '10px 0px',
                                     textAlign: 'end',
+                                    fontSize: '0.8rem',
                                     color: (breakData[employee.codigoBarras]?.time &&
-                                        parseInt(breakData[employee.codigoBarras].time) > 20) ? 'red' : 'green'
+                                        parseInt(breakData[employee.codigoBarras].time) > 40) ? 'error.main' : 'success.main'
                                 }}
                             >
                                 {breakData[employee.codigoBarras]?.time ? breakData[employee.codigoBarras].time : 'No registra'}

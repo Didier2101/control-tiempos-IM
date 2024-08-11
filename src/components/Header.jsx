@@ -18,14 +18,13 @@ const Header = ({ handleOpen, handleOpenList }) => {
     return (
         <>
             <Box
-                p={1}
+
             >
                 <AppBar sx={{
                     position: 'static',
-                    borderRadius: 6,
-                    width: '80%',
+                    width: '100%',
                     margin: '0 auto',
-                    backgroundColor: 'primary.main',
+                    backgroundColor: 'secondary.main',
                 }}>
                     <Toolbar>
 
@@ -44,7 +43,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                             color='info'
                             onClick={handleOpen}
                             sx={{
-                                borderRadius: '14px', // Ajusta el valor según tus necesidades
+                                borderRadius: '6px', // Ajusta el valor según tus necesidades
                             }}
                         >
                             Ingresar empleados
@@ -56,7 +55,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                             onClick={handleOpenList}
                             sx={{
                                 marginLeft: 2,
-                                borderRadius: '14px',
+                                borderRadius: '6px',
                             }}
                         >
                             Lista de empleados

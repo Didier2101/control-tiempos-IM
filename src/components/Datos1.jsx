@@ -189,10 +189,10 @@ const Datos1 = () => {
             sx={{
                 border: 'none',
                 backgroundColor: 'info.main',
-                borderRadius: '16px',
+                borderRadius: '6px',
                 padding: '0px 10px',
                 boxSizing: 'border-box',
-                width: '80%',
+                width: '98%',
                 margin: '0 auto',
             }}
         >
@@ -226,38 +226,38 @@ const Datos1 = () => {
             <Table sx={{ width: '100%', borderCollapse: 'collapse' }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold' }}>Nombre</TableCell>
-                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>
+                        <TableCell sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Nombre</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>
                             Area
                         </TableCell>
-                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Hora de salida</TableCell>
-                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold' }}>Hora de entrada</TableCell>
-                        <TableCell sx={{ textAlign: 'end', padding: '10px 0px', fontWeight: 'bold' }}>Tiempo tomado</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Hora de salida</TableCell>
+                        <TableCell sx={{ textAlign: 'center', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Hora de entrada</TableCell>
+                        <TableCell sx={{ textAlign: 'end', padding: '10px 0px', fontWeight: 'bold', fontSize: '1rem' }}>Tiempo tomado</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {scannedEmployees.map((employee, index) => (
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell component="th" scope="row" sx={{ textAlign: 'start', padding: '10px 0px', fontWeight: 'bold' }}>
+                            <TableCell component="th" scope="row" sx={{ textAlign: 'start', padding: '10px 0px', fontSize: '0.7rem' }}>
                                 {employee.nombres.toUpperCase()}
                             </TableCell>
-                            <TableCell component="th" scope="row" sx={{ textAlign: 'center', padding: '10px 0px', }}>
+                            <TableCell component="th" scope="row" sx={{ textAlign: 'center', padding: '10px 0px', fontSize: '0.7rem' }}>
                                 {employee.area.toUpperCase()}
                             </TableCell>
-                            <TableCell sx={{ padding: '10px 0px', textAlign: 'center' }}>
+                            <TableCell sx={{ padding: '10px 0px', textAlign: 'center', fontSize: '0.7rem' }}>
                                 {coffeeData[employee.codigoBarras]?.out ? (
                                     <Box
                                         sx={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            borderRadius: '10px',
-                                            backgroundColor: 'green',
-                                            color: 'white',
+                                            borderRadius: '6px',
+                                            backgroundColor: 'success.main',
+                                            color: 'info.main',
                                             fontWeight: 'bold',
-                                            fontSize: '14px',
+                                            fontSize: '0.7rem',
                                             textAlign: 'center',
-                                            padding: '3px 6px',
+                                            padding: '3px 8px',
                                         }}
                                     >
                                         {coffeeData[employee.codigoBarras].out}
@@ -271,13 +271,13 @@ const Datos1 = () => {
                                             display: 'inline-flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            borderRadius: '10px',
-                                            backgroundColor: 'green',
-                                            color: 'white',
+                                            borderRadius: '6px',
+                                            backgroundColor: 'warning.main',
+                                            color: 'black',
                                             fontWeight: 'bold',
-                                            fontSize: '14px',
+                                            fontSize: '0.7rem',
                                             textAlign: 'center',
-                                            padding: '3px 6px',
+                                            padding: '3px 8px',
                                         }}
                                     >
                                         {coffeeData[employee.codigoBarras].in}
@@ -288,8 +288,9 @@ const Datos1 = () => {
                                 sx={{
                                     padding: '10px 0px',
                                     textAlign: 'end',
+                                    fontSize: '0.8rem',
                                     color: (coffeeData[employee.codigoBarras]?.time &&
-                                        parseInt(coffeeData[employee.codigoBarras].time) > 20) ? 'red' : 'green'
+                                        parseInt(coffeeData[employee.codigoBarras].time) > 20) ? 'error.main' : 'success.main'
                                 }}
                             >
                                 {coffeeData[employee.codigoBarras]?.time ? coffeeData[employee.codigoBarras].time : 'No registra'}
