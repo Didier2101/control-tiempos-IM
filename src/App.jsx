@@ -8,6 +8,8 @@ import { useDropzone } from 'react-dropzone';
 import * as XLSX from 'xlsx';
 import Footer from './components/Footer';
 
+import Swal from 'sweetalert2'; // Importar SweetAlert2
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -70,11 +72,18 @@ function App() {
 
     localStorage.setItem('employeeData', JSON.stringify(existingData));
     setEmployeeList(existingData);
-    alert('Datos guardados exitosamente');
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Éxito',
+      text: 'Datos guardados exitosamente',
+    });
+
     setEmployeeData({ codigoBarras: '', nombres: '', area: '' });
     setEditIndex(null);
     handleClose();
   };
+
 
   const handleEdit = (index) => {
     setEmployeeData(employeeList[index]);

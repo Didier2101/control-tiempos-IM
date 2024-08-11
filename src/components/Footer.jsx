@@ -5,8 +5,6 @@ const Footer = () => {
     return (
         <Box
             sx={{
-                bottom: 0,
-                left: 0,
                 width: '100%',
                 backgroundColor: 'background.paper',
                 color: 'text.primary',
@@ -17,7 +15,6 @@ const Footer = () => {
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 gap: '10px', // Espacio entre la imagen y el texto
-                zIndex: 10,
                 marginTop: '10px'
             }}
         >

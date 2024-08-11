@@ -9,6 +9,8 @@ import { Box, IconButton, TextField } from '@mui/material';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import Swal from 'sweetalert2'; // Importar SweetAlert2
+
 
 
 const Datos2 = () => {
@@ -84,7 +86,11 @@ const Datos2 = () => {
         const employee = employeeData.find(emp => emp.codigoBarras === barcode);
 
         if (!employee) {
-            alert('Empleado no encontrado');
+            Swal.fire({
+                icon: 'error',
+                title: 'Empleado no encontrado',
+                text: 'No se encontró el empleado con el código de barras proporcionado.',
+            });
             return;
         }
 
@@ -115,8 +121,22 @@ const Datos2 = () => {
 
                 newBreakData = { ...prevState, [barcode]: { ...currentEntry, in: time, time: `${adjustedDiff} minutos`, timestamp: now } };
             } else {
-                // Reiniciar registro
-                newBreakData = { ...prevState, [barcode]: { out: time, in: null, time: null, timestamp: now } };
+                // Verificar si han pasado más de 120 minutos desde la última salida
+                const lastOutTime = new Date(currentEntry.timestamp);
+                const minutesSinceLastOut = Math.round((now - lastOutTime) / 60000); // Diferencia en minutos
+
+                if (minutesSinceLastOut > 240) {
+                    // Permitir nueva salida
+                    newBreakData = { ...prevState, [barcode]: { out: time, in: null, time: null, timestamp: now } };
+                } else {
+                    // No permitir nueva salida y mostrar mensaje/
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Salida no permitida',
+                        html: `El empleado <strong>${employee.nombres}</strong> ya ha salido. Debe esperar ${240 - minutesSinceLastOut} minutos para volver a salir, o informar a tu Supervisor`,
+                    });
+                    return prevState; // No hacer cambios si no han pasado 120 minutos
+                }
             }
 
             // Actualizar en localStorage
@@ -268,7 +288,7 @@ const Datos2 = () => {
                                             justifyContent: 'center',
                                             borderRadius: '6px',
                                             backgroundColor: 'warning.main',
-                                            color: 'white',
+                                            color: 'info.main',
                                             fontWeight: 'bold',
                                             fontSize: '0.7rem',
                                             textAlign: 'center',
@@ -284,6 +304,8 @@ const Datos2 = () => {
                                     padding: '10px 0px',
                                     textAlign: 'end',
                                     fontSize: '0.8rem',
+                                    fontWeight: (breakData[employee.codigoBarras]?.time &&
+                                        parseInt(breakData[employee.codigoBarras].time) > 40) ? 'bold' : '',
                                     color: (breakData[employee.codigoBarras]?.time &&
                                         parseInt(breakData[employee.codigoBarras].time) > 40) ? 'error.main' : 'success.main'
                                 }}
