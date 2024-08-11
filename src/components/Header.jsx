@@ -25,7 +25,7 @@ const Header = ({ handleOpen, handleOpenList }) => {
                     borderRadius: 6,
                     width: '80%',
                     margin: '0 auto',
-                    backgroundColor: 'secondary.main',
+                    backgroundColor: 'primary.main',
                 }}>
                     <Toolbar>
 
